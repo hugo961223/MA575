@@ -1,0 +1,55 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+#### 1. Choose the response variable (Y) and one covariate (X) & Put thought for your response and covariate variable selection.
+
+```{r, echo = TRUE}
+BikeSharingInDay <- read.csv(file = "C:/Users/hugo1/Documents/MA575/Proj/day.csv")
+# import dataset day.csv
+
+casual <- as.numeric(unlist(BikeSharingInDay['casual']))
+# choose counts of casual users as response variable (Y)
+
+atemp <- as.numeric(unlist(BikeSharingInDay['atemp']))
+# choose normalized temperature in Celsius as covariate (X)
+```
+
+* * *
+
+#### 2. Plot Y vx X (i.e. a scatterplot) from the data.
+
+```{r, echo = TRUE}
+plot(atemp, casual, xlab = 'Feeling Temperature', ylab = 'Counts of Casual Users')
+# scatterplot of casual vs atemp
+```
+
+* * *
+
+#### 3&4. Perform OLS using R on your response and covariate & Submit the output from R of OLS (coefficient estimate, t values, p values) and interpret the results.
+
+```{r, echo = TRUE}
+OLS_Casual_Atemp <- lm(casual~atemp)
+# OLS on casual vs atemp
+
+summary(OLS_Casual_Atemp)
+# summary of this OLS
+```
+
+* * *
+
+#### 5. Plot also Y vs X for your choice of data set and overlay on your plot the linear regression fit obtained from R.
+
+```{r, echo = TRUE}
+plot(atemp, casual , xlab = 'Feeling Temperature', ylab = 'Counts of Casual Users')
+# scatterplot
+
+abline(lsfit(atemp, casual), col = 'red')
+# linear regression fit obtained from R
+```
+

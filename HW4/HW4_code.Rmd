@@ -1,0 +1,128 @@
+---
+title: "HW4_code"
+author: "Hengchang Hu"
+date: "10/2/18"
+output:
+  pdf_document: default
+  html_document: default
+---
+#### Chapter 2.2
+&nbsp;
+
+#### (a)
+
+```{r}
+indicators <- read.table("C:/Users/hugo1/Documents/MA575/HW4/indicators.txt", header = TRUE) 
+# import the dataset
+
+OLS_priceloan <- lm(PriceChange~LoanPaymentsOverdue, indicators) 
+# get the least square model
+
+esti_beta1_pl <- coef(summary(OLS_priceloan))[, "Estimate"]["LoanPaymentsOverdue"][[1]]
+
+print(paste("The estimation of beta_1 is ", esti_beta1_pl))
+# show estimation value of beta_1
+
+std_beta1_pl <- coef(summary(OLS_priceloan))[, "Std. Error"]["LoanPaymentsOverdue"][[1]] 
+
+print(paste("The Standard error of beta_1 is ", std_beta1_pl))
+# show standard error value of beta_1
+
+print(paste("The 95% CI of beta_1 is [", esti_beta1_pl - 
+              qt(0.975,16) * std_beta1_pl, esti_beta1_pl
+            + qt(0.975,16) * std_beta1_pl, "]"))
+# 95% confidence interval of beta_1
+```
+
+### From above we can tell that there is evidence of a significant negative linear association.
+&nbsp;
+
+####(b)
+
+```{r}
+newdata <- list("LoanPaymentsOverdue" = 4) # type in newdata
+
+esti_pl_4 <- predict(OLS_priceloan, newdata)[[1]] # estimation value
+
+print(paste("When X = 4, E(Y|X) = ", esti_pl_4)) # show estimation value
+
+S_pl <- summary(OLS_priceloan)$sigma # get the estimate of sigma
+
+SXX_pl <- (S_pl / std_beta1_pl) ^ 2 # get SXX
+
+lowerbound_pl <- esti_pl_4 - qt(0.975, 16) * S_pl * sqrt(1 / 18 + 
+    (4 - mean(indicators["LoanPaymentsOverdue"][,1])) ^ 2 / SXX_pl)
+# get the lower bound of 95% CI for E(Y|X=4)
+
+upperbound_pl <- esti_pl_4 + qt(0.975, 16) * S_pl * sqrt(1 / 18 + 
+    (4 - mean(indicators["LoanPaymentsOverdue"][,1])) ^ 2 / SXX_pl)
+# upper bound
+
+print(paste("95% CI for E(Y|X=4) is [", lowerbound_pl, upperbound_pl, "]"))
+# 95% CI for E(Y|X=4)
+```
+
+### From above we can tell that 0% is not in the 95% CI for E(Y|X=4), so it is not a feasible value.
+&nbsp;
+
+#### Chapter 2.3
+&nbsp;
+
+#### (a)
+
+#### Through the output of R, $\hat{\beta_0}$ is 0.6417099, $se(\hat{\beta_0})$ is 0.1222707, Degree of Freedom is 28. Therefore, the 95% CI for $\beta_0$ is [`r 0.6417099 - qt(0.975, 28) * 0.1222707`, `r 0.6417099 + qt(0.975, 28) * 0.1222707`].
+&nbsp;
+
+#### (b)
+
+#### From the output of R, we can know that $\hat{\beta_1} = 0.0112916$, and the $se(\hat{\beta_1}) = 0.0008184$. Since the statistics $T = \frac{(\hat{\beta_1} - \beta_1)}{se(\hat{\beta_1})}$ = `r (0.0112916 - 0.01) / 0.0008184`, and the acceptance region is $\big[t(0.025, n-2), t(0.975, n-2)\big]$ = [`r qt(0.025, 28)`, `r qt(0.975, 28)`]. Therefore the T statistics fall into acceptance region, can not reject the null hypothesis.
+&nbsp;
+
+#### (c)
+
+#### When $X=130$, $E(Y|X=130) = 0.6417099 + 0.0112916 \times 130$ = `r 0.6417099 + 0.0112916 * 130`. And the 95% CI for $E(Y|X=130)% is [`r 2.1096179 - qt(0.975, 28) * 0.3298 * sqrt(1/30)`, `r 2.1096179 + qt(0.975, 28) * 0.3298 * sqrt(1/30)`]
+&nbsp;
+
+#### Chapter 2.6
+&nbsp;
+
+#### (a)
+
+\begin{equation*}
+\begin{split}
+(y_i - \hat{y_i}) &= y_i - \hat{\beta_0} - \hat{\beta_1} x_i \\
+&= y_i - (\bar{y} - \hat{\beta_1} \bar{x}) - \hat{\beta_1} x_i \\
+&= (y_i - \bar{y}) - \hat{\beta_1} (x_i - \bar{x})
+\end{split}
+\end{equation*}
+
+&nbsp;
+
+#### (b)
+
+\begin{equation*}
+\begin{split}
+(\hat{y_i} - \bar{y}) &= \hat{\beta_0} + \hat{\beta_1} x_i - \bar{y} \\
+&= \bar{y} - \hat{\beta_1} \bar{x} + \hat{\beta_1} x_i - \bar{y} \\
+&= \hat{\beta_1}(x_i - \bar{x})
+\end{split}
+\end{equation*}
+
+&nbsp;
+
+#### (c)
+
+\begin{equation*}
+\begin{split}
+\sum_{i=1}^{n}(y_i - \hat{y_i})(\hat{y_i} - \bar{y}) &= \sum_{i=1}^{n}\big[(y_i - \bar{y}) - \hat{\beta_1} (x_i - \bar{x})\big] \hat{\beta_1}(x_i - \bar{x}) \\
+&= \hat{\beta_1} \Big(\sum_{i=1}^{n} (y_i - \bar{y})(x_i - \bar{x}) - \hat{\beta_1} \sum_{i=1}^{n} (x_i - \bar{x})^2 \Big) \\
+&= \hat{\beta_1} \Big(SXY - \frac{SXY}{SXX} SXX\Big) \\
+&= 0
+\end{split}
+\end{equation*}
+
+
+
+
+
+

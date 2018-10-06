@@ -1,0 +1,133 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lachaise Assignment
+% LaTeX Template
+% Version 1.0 (26/6/2018)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Marion Lachaise & François Févotte
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%       PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn]{article}
+
+\usepackage{amsmath}
+%----------------------------------------------------------------------------------------
+%       ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{CAS MA575: Assignment \#5} % Title of the assignment
+
+\author{Hu Hengchang(U34497427)\\ \texttt{hhc@bu.edu}} % Author name and email address
+
+\date{Boston University --- \today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+
+
+%------------------------------------------------
+
+1.\\
+
+It is obvious that $\frac{\partial f(x)}{\partial x} = (\frac{\partial f(x)}{x_1},..., \frac{\partial f(x)}{x_d})^T$, and $\frac{\partial (\frac{\partial f(x)}{x_1})}{\partial x} = \big(\frac{\partial^2 f(x)}{\partial x_1^2},..., \frac{\partial^2 f(x)}{\partial x_1 \partial x_d}\big)^T$\\
+
+Therefore, $\frac{\partial }{\partial x} \Big(\frac{\partial f(x)}{x}\Big)^T = \frac{\partial }{\partial x} \Big(\frac{\partial f(x)}{x_1},..., \frac{\partial f(x)}{x_d}\Big) = \big[\frac{\partial (\frac{\partial f(x)}{x_1})}{\partial x},...,\frac{\partial (\frac{\partial f(x)}{x_d})}{\partial x} \big] = \big[\big(\frac{\partial^2 f(x)}{\partial x_1^2},..., \frac{\partial^2 f(x)}{\partial x_1 \partial x_d}\big)^T,...\big(\frac{\partial^2 f(x)}{\partial x_d \partial x_1},..., \frac{\partial^2 f(x)}{\partial x_d^2}\big)^T\big] = H$\\
+\\
+
+
+
+2.(a)\\
+
+From the definition of covariance matrix, we can see $cov(Y) = (a_{ij})_{p \times p}$ is a $p \times p$ matrix, and $a_{ij} = cov(y_i, y_j)$.
+
+$Y - E(Y) = \Big(y_1 - E(y_1),...,y_p - E(y_p)\Big)^T$ $\Rightarrow$ $\{Y - E(Y)\}  \{Y - E(Y)\}^T = (b_{ij})_{p \times p}, b_{ij} = (y_i - E(y_i))(y_j - E(y_j))$\\
+
+Therefore, $E\big[\{Y - E(Y)\}  \{Y - E(Y)\}^T\big] = (c_{ij})_{p \times p}, c_{ij} = E\big[\{y_i - E(y_i)\}  \{y_j - E(y_j)\}^T\big] = cov(y_i, y_j) = a_{ij} \Rightarrow E\big[\{Y - E(Y)\}  \{Y - E(Y)\}^T\big] = cov(Y)$\\
+
+We set $Y - E(Y)$ as $A^T$,$ E\big[\{y_i - E(y_i)\}  \{y_j - E(y_j)\}^T\big] = E(A^T A)$, becasue for any vector $x, x^T E(A^T A) x = E(x^T A^T A x) = E\big((Ax)^T (Ax)\big) \geq 0 \Rightarrow cov(Y)$ is positive semidefinite. \\
+
+
+2.(b)\\
+
+\begin{equation*}
+\begin{split}
+cov(AY) &= E\big[\{AY - E(AY)\}  \{AY - E(AY)\}^T\big]\\
+&= E\big[\{A\big(Y - E(Y)\big)\}  \{A\big(Y - E(Y)\big)\}^T\big]\\
+&= E\big[A\{Y - E(Y)\}  \{Y - E(Y)\}^T A^T\big]\\
+&= A E\big[\{Y - E(Y)\}  \{Y - E(Y)\}^T\big] A^T\\
+&= A cov(Y) A^T
+\end{split}
+\end{equation*}\\
+\\
+
+
+
+3.(a)\\
+
+\begin{equation*}
+\begin{split}
+cov(X + Z, Y) &= E\big[\{X + Z - E(X + Z)\}  \{Y - E(Y)\}^T\big]\\
+&= E\big[\{[X - E(X)] + [Z - E(Z)]\}  \{Y - E(Y)\}^T\big]\\
+&= E\big[\{X - E(X)\}  \{Y - E(Y)\}^T\big] + E\big[\{Z - E(Z)\}  \{Y - E(Y)\}^T\big]\\
+&= cov(X, Y) + cov(Z, Y)
+\end{split}
+\end{equation*}\\
+
+
+
+(b)\\
+
+\begin{equation*}
+\begin{split}
+cov(AX, Y) &= E\big[\{AX - E(AX)\}  \{Y - E(Y)\}^T\big]\\
+&= E\big[A \{X - E(X)\}  \{Y - E(Y)\}^T\big]\\
+&= A E\big[\{X - E(X)\}  \{Y - E(Y)\}^T\big]\\
+&= A \sum\nolimits_{XY}
+\end{split}
+\end{equation*}\\
+
+
+
+(c)\\
+
+\begin{equation*}
+\begin{split}
+cov(Y, X) &= E\big[\{Y - E(Y)\}  \{X - E(X)\}^T\big]\\
+&= E\big[\big(\{X - E(X)\}  \{Y - E(Y)\}^T\big)^T\big]\\
+&= E\big[\{Y - E(Y)\}  \{X - E(X)\}^T\big]^T\\
+&= \sum\nolimits_{XY}^T
+\end{split}
+\end{equation*}\\
+
+
+(d)\\
+
+\begin{equation*}
+\begin{split}
+cov(Y, AX) &= E\big[\{Y - E(Y)\}  \{AX - E(AX)\}^T\big]\\
+&= E\big[\{Y - E(Y)\}  \{X - E(X)\}^T A^T \big]\\
+&= E\big[\{Y - E(Y)\}  \{X - E(X)\}^T\big]^T A^T\\
+&= \sum\nolimits_{XY}^T A^T
+\end{split}
+\end{equation*}
+
+
+
+
+
+\end{document}

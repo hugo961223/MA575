@@ -3,8 +3,8 @@ title: "HW4_code"
 author: "Hengchang Hu"
 date: "10/2/18"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 #### Chapter 2.2
 &nbsp;
@@ -80,7 +80,11 @@ print(paste("95% CI for E(Y|X=4) is [", lowerbound_pl, upperbound_pl, "]"))
 
 #### (c)
 
-#### When $X=130$, $E(Y|X=130) = 0.6417099 + 0.0112916 \times 130$ = `r 0.6417099 + 0.0112916 * 130`. And the 95% CI for $E(Y|X=130)% is [`r 2.1096179 - qt(0.975, 28) * 0.3298 * sqrt(1/30)`, `r 2.1096179 + qt(0.975, 28) * 0.3298 * sqrt(1/30)`]
+#### When $X=130$, $E(Y|X=130) = 0.6417099 + 0.0112916 \times 130$ = `r 0.6417099 + 0.0112916 * 130`. And the 95% PI for $E(Y|X=130)$ is 
+\begin{equation*}
+\hat{y}_p \pm t_{(1-a/2,n-2)} \times S \sqrt{(1+\frac{1}{n}+\frac{(x_p-\bar{x})^2}{\sum(x_i-\bar{x})^2)}}
+\end{equation*}
+#### which is [`r 2.1096179 - qt(0.975, 28) * 0.3298 * sqrt(1 + 1 / 30)`, `r 2.1096179 + qt(0.975, 28) * 0.3298 * sqrt(1 + 1 / 30)`]
 &nbsp;
 
 #### Chapter 2.6

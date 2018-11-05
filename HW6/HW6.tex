@@ -1,0 +1,178 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lachaise Assignment
+% LaTeX Template
+% Version 1.0 (26/6/2018)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Marion Lachaise & François Févotte
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%       PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fleqn]{article}
+
+\usepackage{amsmath}
+%----------------------------------------------------------------------------------------
+%       ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{CAS MA575: Assignment \#6} % Title of the assignment
+
+\author{Hu Hengchang(U34497427)\\ \texttt{hhc@bu.edu}} % Author name and email address
+
+\date{Boston University --- \today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+
+
+%------------------------------------------------
+
+1.\\
+
+$X \in \mathbf{R}^{n \times p}$ is a deterministic design matrix and rank$(X) = p$. $(XX^T)^T = XX^T$, so $XX^T$ is a n by n real symmetric matrix. 
+
+It is obvious that rank$(XX^T) = $ rank$(X) = $ p, so the number of non-zero eigenvalues of matrix $XX^T$ equals to rank$(XX^T)$ which is p. Assume they are $\lambda_1, \lambda_2,...,\lambda_p$.For symmetric matrix $XX^T$, we know that there is a set of orthonormal eigenvectors of $XX^T$ $i.e.$ $\vec{q_1}, \vec{q_2},...,\vec{q_n}$ and $A\vec{q_i} = \lambda_i \vec{q_i}$ for $i = 1,2,...,n$. Therefore $QXX^TQ^T = diag(\lambda_1,\lambda_2,...,\lambda_p,0...,0)$, $Q$ is a matrix as $\left(\begin{matrix}
+\vec{q_1}^T \\ 
+\vec{q_2}^T \\ 
+.\\
+.\\
+.\\
+\vec{q_n}^T
+\end{matrix}\right)$.
+
+In particular, $X = \left(\begin{matrix}
+	0 & 0 \\ 
+	0 & 1 \\ 
+	2 & 0
+\end{matrix}\right) $. $XX^T = \left(\begin{matrix}
+0 & 0 & 0\\ 
+0 & 1 & 0\\ 
+0 & 0 & 4
+\end{matrix}\right) $. There are two non-zero eigenvalues of $XX^T$, $\lambda_1 = 1, \lambda_2 = 4$. From these two eigenvalues, we can figure out that $\vec{q_1}^T =$ (0 1 0), $\vec{q_2}^T =$ (0 0 1), since eigenvalue $\lambda_3 = 0$, we set $\vec{q_3}^T =$ (1 0 0) so that $Q = \left(\begin{matrix}
+0 & 1 & 0\\ 
+0 & 0 & 1\\ 
+1 & 0 & 0
+\end{matrix}\right)$, and it is easy to prove that $QXX^TQ^T = \left(\begin{matrix}
+1 & 0 & 0\\ 
+0 & 4 & 0\\ 
+0 & 0 & 0
+\end{matrix}\right)$.\\
+
+ 
+2.\\
+
+By Problem 1., we can know that $\exists$ orthogonal matrix Q, s.t $QXX^TQ^T = diag(\lambda_1,...,\lambda_p,0,...,0)$.
+
+So we can get that: $\hat{\beta} = (X^TX)^{-1}X^TY = [(QX)^TQX]^{-1}(QX)^T(QY)$, we set $QX = A$, and $AA^T = diag(\lambda_1,...,\lambda_p,0,...,0)$, assume $A = \left(\begin{matrix}
+\vec{a_1}^T\\
+\vec{a_2}^T\\
+.\\
+.\\
+\vec{a_n}^T
+\end{matrix}\right)$ $\Rightarrow$ $AA^T = (\vec{a_i}^T \vec{a_j})_{ij}$ $\Rightarrow$ $\vec{a_i}^T \vec{a_i} = 0$ if $i > p$, so $\vec{a_i} = 0$, if $i > p$. Matrix $A$ has two parts, $A = \left(\begin{matrix}
+A_p\\
+0
+\end{matrix}\right)$, $A_p$ is a p by p full rank matrix, so $A^TA = A_p^T A_p$. By the way we can rewrite $\hat{\beta}$ as $\hat{\beta} = (A^TA)^{-1}A^TQY$.\\
+
+\begin{equation*}
+\begin{split}
+(n-p) \hat{\sigma}^2 &= (Y-X\hat{\beta})^T (Y-X\hat{\beta})\\
+&= (QY - QX\hat{\beta})^T (QY - QX\hat{\beta}) \\
+&= \Big(Q(X\beta + e) - A(A^TA)^{-1}A^TQ(X\beta +e)\Big)^T \Big(Q(X\beta + e) - A(A^TA)^{-1}A^TQ(X\beta +e)\Big) \\
+&= \Big((Qe - A(A^TA)^{-1}A^TQe)^T (Qe - A(A^TA)^{-1}A^TQe)\Big)
+\end{split}
+\end{equation*}\\
+
+Assume $Qe = \left(\begin{matrix}
+Qe_{(p)}\\
+Qe_{(n-p)}
+\end{matrix}\right)$, $A(A^TA)^{-1}A^TQe = \left(\begin{matrix}
+A_p\\
+0
+\end{matrix}\right) (A_p^T A_p)^{-1} \left(\begin{matrix}
+A_p^T & 0
+\end{matrix}\right) \left(\begin{matrix}
+Qe_{(p)}\\
+Qe_{(n-p)}
+\end{matrix}\right)= \left(\begin{matrix}
+Qe_{(p)}\\
+0
+\end{matrix}\right)$, $\Rightarrow$ $(n-p)\hat{\sigma}^2 = \left(\begin{matrix}
+0\\
+Qe_{(n-p)}
+\end{matrix}\right)^T \left(\begin{matrix}
+0\\
+Qe_{(n-p)}
+\end{matrix}\right) = (Qe_{(n-p)})^T (Qe_{(n-p)})$\\
+
+Because $Q$ is orthogonal matrix, so $\sigma^{-1}Qe$ is still standard multivariate normal distribution. Therefore, $\frac{(n-p)\hat{\sigma}^2}{\sigma^2} = (\sigma^{-1}Qe_{(n-p)})^T (\sigma^{-1}Qe_{(n-p)})$ follows a $\chi_{n-p}^2$.\\
+
+
+3.\\
+
+Because $X^TX = \left(\begin{matrix}
+n & \sum_{i=1}^{n}x_i \\ 
+\sum_{i=1}^{n}x_i & \sum_{i=1}^{n}x_i^2 
+\end{matrix}\right)$ $\Rightarrow$ $(X^TX)^{-1} = \frac{1}{nS_{XX}}\left(\begin{matrix}
+\sum_{i=1}^{n}x_i^2 & -\sum_{i=1}^{n}x_i \\ 
+-\sum_{i=1}^{n}x_i & n
+\end{matrix}\right)$. And $X^TY = \left(\begin{matrix}
+\sum_{i=1}^{n}y_i\\ 
+\sum_{i=1}^{n}x_i y_i
+\end{matrix}\right)$. 
+
+
+\begin{equation*}
+\begin{split}
+\frac{1}{nS_{XX}}\Big( \sum x_i^2 \sum y_i - \sum x_i \sum x_i y_i \Big) &= \frac{1}{nS_{XX}}\Big( \big(\sum(x_i - \bar{x}^2) + n\bar{x}^2\big) \sum y_i -n\bar{x} \sum x_i y_i \Big)\\
+&= \frac{1}{nS_{XX}}\Big( S_{XX} \sum y_i - (n\bar{x} \sum x_i y_i - n\bar{x}^2 \sum y_i)\Big)\\
+&= \sum \Big( \frac{1}{n} - \frac{x_i - \bar{x}}{S_{XX}} \bar{x}\Big) y_i
+\end{split}
+\end{equation*}
+
+\begin{equation*}
+\begin{split}
+\frac{1}{nS_{XX}}\Big( n\sum x_i y_i - \sum x_i \sum y_i \Big) &= \frac{1}{S_{XX}} \Big( \sum x_i y_i - \bar{x} \sum y_i \Big)\\
+&= \sum \Big( \frac{1}{S_{XX}} (x_i - \bar{x}) y_i \Big)\\
+&= \sum \Big( \frac{x_i - \bar{x}}{S_{XX}} (y_i - \bar{y}) \Big)
+\end{split}
+\end{equation*}
+
+Therefore, $(X^TX)^{-1}X^TY = \frac{1}{nS_{XX}}\left(\begin{matrix}
+\sum_{i=1}^{n}x_i^2 & -\sum_{i=1}^{n}x_i \\ 
+-\sum_{i=1}^{n}x_i & n
+\end{matrix}\right) $ $\left(\begin{matrix}
+\sum_{i=1}^{n}y_i\\ 
+\sum_{i=1}^{n}x_i y_i
+\end{matrix}\right)$ $= \left(\begin{matrix}
+\sum \Big( \frac{1}{n} - \frac{x_i - \bar{x}}{S_{XX}} \bar{x}\Big) y_i\\
+\sum \Big( \frac{x_i - \bar{x}}{S_{XX}} (y_i - \bar{y}) \Big)
+\end{matrix} \right)$.
+
+It is obvious that $\sigma^2 (X^TX)^{-1} = \frac{\sigma^2}{nS_{XX}}\left(\begin{matrix}
+\sum_{i=1}^{n}x_i^2 & -\sum_{i=1}^{n}x_i \\ 
+-\sum_{i=1}^{n}x_i & n
+\end{matrix}\right) = \frac{\sigma^2}{nS_{XX}}\left(\begin{matrix}
+S_{XX} + n\bar{x}^2 & -n\bar{x}\\
+-n\bar{x} & n
+\end{matrix}\right)= \left(\begin{matrix}
+\Big(\frac{1}{n} + \frac{(\bar{x})^2}{S_{XX}}\Big) \sigma^2 & -\frac{\bar{x}}{S_{XX}}\sigma^2 \\
+-\frac{\bar{x}}{S_{XX}}\sigma^2 & \frac{1}{S_{XX}}\sigma^2
+\end{matrix}\right)$
+
+\end{document}

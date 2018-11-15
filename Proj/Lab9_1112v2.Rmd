@@ -1,0 +1,115 @@
+---
+title: "Lab 9 Multiple Linear Regression (Training, Validation)"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+# Run initialization R file
+setwd("C:/Users/hugo1/Documents/ma575/Proj")
+rm(list = ls())
+source("PreProcessingLab9.R")
+library(corrplot) # for correlation plot
+```
+```{r}
+# Extract summer data only
+DataSetSummer = Dataset[(Dataset$Date >= "2004-06-1" & Dataset$Date <= "2004-8-31") | (Dataset$Date >= "2005-06-1" & Dataset$Date <= "2005-8-31"),]
+
+# Randomize rows
+DataSetSummer = DataSetSummer[sample(nrow(DataSetSummer)),]
+
+# Form Training, Validation and Testing sets
+DataSetSummerTraining = DataSetSummer[1:796,]; # 50% for the data
+DataSetSummerValidation = DataSetSummer[796:1194,]; # 25% for the data
+DataSetSummerTesting = DataSetSummer[1194:1593,]; # 25% for the data
+
+# Perform training
+attach(DataSetSummerTraining) 
+
+# Plot scatter matrix 
+library(car)
+pairs(~GroundCO+SensorCO+Temperature+RelativeHumidity+AbsoluteHumidity+Time,
+      data=DataSetSummer,gap=0.4)
+
+# Correlation matrix
+X <- cbind(GroundCO,SensorCO,Temperature,RelativeHumidity,AbsoluteHumidity,Time)
+c <- cor(X)
+round(c,3)
+res1 <- cor.mtest(X, conf.level = .95)
+## corrplot 0.84 loaded
+corrplot(round(c,3),p.mat = res1$p, sig.level = .05, type = "upper")
+# temperature and relatively humidity are highly correlated (negatively)
+# absolute humidity and relatively humidity are highly correlated (positively)
+# ground CO and sensor CO are highly correlated (positively)
+
+# QUESTION1 - keep ground CO, shouldn't we remove sensor CO? ####
+# keep relative humidity, remove temperature, and absolute humidity, then keep time
+```
+
+
+```{r}
+# Perform Multiple Linear Regression between GroundCO vs Temperature + SensorCO + RelativeHumidity 
+# + AbsoluteHumidity + Time
+# QUESTION2 - why is there a square term? (SensorCO^2) ####
+m.mls <- lm(GroundCO ~ SensorCO + I(SensorCO^2) + RelativeHumidity + Time)
+
+# Examine R output for MLS
+summary(m.mls)
+
+```
+
+
+
+```{r}
+# Diagnostics -----------------------------------------------------------------------------------------------
+
+# Standarized Residuals
+StanResMLS <- rstandard(m.mls)
+par(mfrow=c(1,1))
+plot(GroundCO,StanResMLS,xlab="GroundCO", ylab="Standardized Residuals",xlim=c(0,7), col="blue") +abline(h=2,lty=2) + abline(h=-2,lty=2) 
+# COMMENT - the legend part doesn't work for me
+#legend(5.5,1.5,legend=c("MLS"), col=c("blue"), lty=0, cex=1, pch=1)
+
+# Test of Normality for Standarized Residuals of QMLS and QuartLS
+q1 <- qqnorm(StanResMLS, plot.it = TRUE) 
+# This doesn't work me either
+qqline(StanResMLS,lty = 2)
+
+# Histogram of QMLS and QuartLS
+par(mfrow=c(1,1))
+hist(StanResMLS,100)
+
+```
+```{r}
+# Validation ------------------------------------------------------------------------------------------------
+
+# Residuals for training data
+ResMLS <- resid(m.mls)
+par(mfrow=c(1,1))
+plot(GroundCO,ResMLS,xlab="Ground", ylab="Residuals",xlim=c(0,7), col="blue")
+
+# Residuals for Validation data
+output<-predict(m.mls, se.fit = TRUE, newdata=data.frame(SensorCO=DataSetSummerValidation$SensorCO, RelativeHumidity=DataSetSummerValidation$RelativeHumidity, Time=DataSetSummerValidation$Time))
+ResMLSValidation <- DataSetSummerValidation$GroundCO - output$fit
+points(DataSetSummerValidation$GroundCO,ResMLSValidation,xlab="GroundCO", ylab="Residuals",xlim=c(0,7),col="red")
+legend(4.9, -1, legend=c("Training","Validation"), col=c("blue","red"), lty=0, cex=1, pch=1)
+
+# Mean Square Error for training data
+mean((ResMLS)^2)
+```
+
+```{r}
+# Mean Square Error for validation data
+mean((ResMLSValidation)^2)
+
+detach(DataSetSummerTraining)
+
+```
+

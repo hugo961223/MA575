@@ -1,0 +1,78 @@
+---
+title: "MA575 Lab6"
+author: "Shuqiang Chen, Hengchang Hu, Haikuo Lu, Chi Chen, Shreya Gupta, Azar Ghahari"
+date: "10.24.2018"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+```{r,echo = TRUE}
+# 1. Choose the response variable (Y) and one covariate (X). 
+#Please put some though for your response and covariate variable selection.
+# import dataset day.csv
+BikeSharingInDay <- read.csv(file = "C:/Users/hugo1/Documents/ma575/Proj/day.csv")
+
+# Sneak peak at the data
+head(BikeSharingInDay)
+
+# choose counts of total rental bikes as response variable (Y)
+# hypothesis: temp(X1),atemp(X2),hum(X3),windspeed(X4),holiday(X5),weathersit(X6),year(X7) have impact on counts of total rental bikes(Y)
+cnt <- BikeSharingInDay$cnt
+
+# choose covariate (X1~X7)
+temp <- BikeSharingInDay$temp
+atemp <- BikeSharingInDay$atemp
+hum <- BikeSharingInDay$hum
+windspeed <- BikeSharingInDay$windspeed
+holiday <- BikeSharingInDay$holiday
+weathersit <- BikeSharingInDay$weathersit
+year <- BikeSharingInDay$yr
+
+```
+### We choose these four covariates (temp,atemp,hum,windspeed) because they are all numeric variables and easy to interpret. And we choose other three covariates (holiday,weathersit,year) because we thought it may affect the using of bikes.
+
+* * *
+
+```{r,echo=TRUE}
+# 2. Plot Y VS. X1-x4 (i.e. a scatterplot) from the data.
+# Plot scatter matrix 
+pairs(~cnt+temp+atemp+hum+windspeed,gap=0.4)
+```
+
+
+
+```{r,echo=TRUE}
+m.mls <- lm(cnt ~ temp + atemp + hum + windspeed + holiday + weathersit + year)
+summary(m.mls)
+
+# correlation matrix
+X <- cbind(cnt, temp, atemp, hum, windspeed, holiday, weathersit, year)
+c <- cor(X)
+round(c,3)
+```
+### We delete 'atemp' variable because it is not that signficant and this variable is highly correlated with 'temp' variable. 
+* * * 
+
+```{r,echo=TRUE}
+# 3. Perform MLR using R on your response (Y) and covariates (X1,X2, ..Xr) .
+
+m.mls <- lm(cnt ~ temp + hum + windspeed + holiday + weathersit + year)
+summary(m.mls)
+
+
+```
+### 4.In the output of this MLR, we can see that except 'hum' is significant under 0.05 significant level other covariates are all significant under 0.001 significant level. 
+* * *
+
+```{r,echo=TRUE}
+# 5.Standard Residuals
+StanResMLS <- rstandard(m.mls)
+par(mfrow=c(1,1))
+plot(cnt,StanResMLS,xlab="cnt", ylab="Standardized Residuals", col="green")
+abline(h=2,lty=2)
+abline(h=-2,lty=2)
+
+```
+### From the plot, we think it is a good model.

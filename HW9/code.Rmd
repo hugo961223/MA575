@@ -1,0 +1,61 @@
+---
+title: "Code for Homework 9"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r include=FALSE}
+pgatour2006 <- read.csv("C:/Users/hugo1/Documents/ma575/HW9/pgatour2006.csv", header=TRUE)
+attach(pgatour2006)
+X1 <- DrivingAccuracy
+X2 <- GIR
+X3 <- PuttingAverage
+X4 <- BirdieConversion
+X5 <- SandSaves
+X6 <- Scrambling
+X7 <- PuttsPerRound
+X <- cbind(X1,X2,X3,X4,X5,X6,X7)
+Y <- PrizeMoney
+library(leaps)
+b <- regsubsets(as.matrix(X), log(Y))
+bestModel <- summary(b)
+library(AICcmodavg)
+```
+
+```{r}
+bestModel$outmat # Best model for each size
+bestModel$adjr2 # Adjusted R square for each size
+bestModel$bic # BIC for each size
+model_1 <- lm(log(Y)~X2)
+model_2 <- lm(log(Y)~X2+X7)
+model_3 <- lm(log(Y)~X2+X4+X6)
+model_4 <- lm(log(Y)~X2+X4+X5+X6)
+model_5 <- lm(log(Y)~X2+X4+X5+X6+X7)
+model_6 <- lm(log(Y)~X1+X2+X4+X5+X6+X7)
+model_7 <- lm(log(Y)~X1+X2+X3+X4+X5+X6+X7)
+print(list(AIC(model_1), AIC(model_2), AIC(model_3), AIC(model_4), AIC(model_5), AIC(model_6), AIC(model_7)))
+print(list(AICc(model_1), AICc(model_2), AICc(model_3), AICc(model_4), AICc(model_5), AICc(model_6), AICc(model_7)))
+```
+
+```{r include=FALSE}
+n <- length(model_1$residuals)
+```
+
+```{r}
+null <- lm(log(Y) ~ 1)
+full <- lm(log(Y) ~ X1 + X2 + X3 + X4 + X5 + X6 + X7)
+backwardAIC <- step(full, direction = 'backward')
+backwardBIC <- step(full, direction = 'backward', k = log(n))
+```
+
+```{r}
+forwardAIC <- step(null, scope = list(lower = null, upper = full), direction = 'forward')
+forwardBIC <- step(null, scope = list(lower = null, upper = full), direction = 'forward', k = log(n))
+```
+
+```{r}
+summary(model_3)
+summary(model_5)
+```
+
